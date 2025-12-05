@@ -1,6 +1,6 @@
 import db
 import hashlib
-import auth
+
 
 class Profile:
     def __init__(self, authentication):
