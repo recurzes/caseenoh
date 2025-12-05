@@ -2,7 +2,6 @@ import hashlib
 import mysql.connector
 import db
 from models import User
-import ui
 
 class Authentication:
 

@@ -16,12 +16,41 @@ class Profile:
             if type == 1:
                 query = """
                         UPDATE users
+                        SET username = ?
+                        WHERE id = ? \
+                        """
+                params = (values,
+                          self.authentication.current_user.get_id())
+                self.authentication.current_user.update_user(values, type)
+            elif type == 2:
+                hashed_password = hashlib.sha256(values.encode()).hexdigest()
+                query = """
+                        UPDATE users
+                        SET password = ?
+                        WHERE id = ? \
+                        """
+                params = (hashed_password,
+                          self.authentication.current_user.get_id())
+                self.authentication.current_user.update_user(values, type)
+            elif type == 3:
+                query = """
+                        UPDATE users
+                        SET email = ?
+                        WHERE id = ? \
+                        """
+                params = (values,
+                          self.authentication.current_user.get_id())
+                self.authentication.current_user.update_user(values, type)
+            elif type == 4:
+                query = """
+                        UPDATE users
                         SET first_name = ?
                         WHERE id = ? \
                         """
                 params = (values,
                           self.authentication.current_user.get_id())
-            elif type == 2:
+                self.authentication.current_user.update_user(values, type)
+            elif type == 5:
                 query = """
                         UPDATE users
                         SET last_name = ?
@@ -29,53 +58,29 @@ class Profile:
                         """
                 params = (values,
                           self.authentication.current_user.get_id())
-            elif type == 3:
-                query = """
-                        UPDATE users
-                        SET contact_number = ?
-                        WHERE id = ?
-                        """
-                params = (values,
-                          self.authentication.current_user.get_id())
-            elif type == 4:
+                self.authentication.current_user.update_user(values, type)
+            elif type == 6:
                 query = """
                         UPDATE users
                         SET birth_month = ?,
                             birth_day   = ?,
                             birth_year  = ?
-                        WHERE id = ?
+                        WHERE id = ? \
                         """
                 params = (values[0],
                           values[1],
                           values[2],
                           self.authentication.current_user.get_id())
-            elif type == 5:
-                query = """
-                        UPDATE users
-                        SET email = ?
-                        WHERE id = ? 
-                        """
-                params = (values,
-                          self.authentication.current_user.get_id())
-            elif type == 6:
-                query = """
-                        UPDATE users
-                        SET username = ?
-                        WHERE id = ? 
-                        """
-                params = (values,
-                          self.authentication.current_user.get_id())
-                self.authentication.current_user.update_user(values)
+                self.authentication.current_user.update_user(values, type)
             elif type == 7:
-                hashed_password = hashlib.sha256(values.encode()).hexdigest()
                 query = """
                         UPDATE users
-                        SET password = ?
-                        WHERE id = ?
+                        SET contact_number = ?
+                        WHERE id = ? \
                         """
-                params = (hashed_password,
+                params = (values,
                           self.authentication.current_user.get_id())
-
+                self.authentication.current_user.update_user(values, type)
             cursor.execute(query, params)
             connection.commit()
 

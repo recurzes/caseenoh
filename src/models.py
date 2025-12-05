@@ -45,52 +45,69 @@ class User:
     def update_balance(self, amount):
         self._balance += amount
 
-    def update_user(self, username):
-        self._username = username
+    def update_user(self, value,  type):
+        if type == 1:
+            self._username = value
+        elif type == 2:
+            self._password = value
+        elif type == 3:
+            self._email = value
+        elif type == 4:
+            self.name = value
+        elif type == 5:
+            self.last_name = value
+        elif type == 6:
+            self.month = int(value[0])
+            self.day = int(value[1])
+            self.year = int(value[2])
+        elif type == 7:
+            self.contact_no = value
 
     def over_display(self):
-        print("+" + "-" * 48 + "+")
-        print(f"| {'PROFILE':^47}|")
-        print("+" + "-" * 48 + "+")
-        print(f"| {'Username':<15}: {self._username:<29} |")
-        print(f"| {'Balance':<15}: ${self._balance:>10.2f}{'':<18} |")
-        print("+" + "-" * 48 + "+")
+        balance = f"${self._balance:,.2f}"
+
+        BOX_WIDTH = 60
+        INNER_WIDTH = BOX_WIDTH - 2
 
 
+        HALF = (INNER_WIDTH - 1) // 2
+
+        LEFT_LABEL = "Username"
+        RIGHT_LABEL = "Balance"
+
+        left_text = f"{LEFT_LABEL}: {self._username}"
+        right_text = f"{RIGHT_LABEL}: {balance}"
+
+        left_text = left_text[:HALF].ljust(HALF)
+        right_text = right_text[:HALF].ljust(HALF + 3)
+
+        print("+" + "-" * BOX_WIDTH + "+")
+        print(f"| {'PROFILE':^{BOX_WIDTH - 2}} |")
+        print("+" + "-" * BOX_WIDTH + "+")
+        print(f"|{left_text}│{right_text}|")
+        print("+" + "-" * BOX_WIDTH + "+")
 
     def profile_info(self):
         password = self._password
         birth_date = f"{self.month:02d}/{self.day:02d}/{self.year}"
         contact_no = str(self.contact_no)
+        balance = f"${self._balance:,.2f}"
+        masked_password = "*" * (len(password) - 61)
 
-        masked_password = "*" * (len(password) - 20)
 
-        balance_str = f"${self._balance:,.2f}"
-        if self._balance >= 0:
-            balance_colored = f"\033[92m{balance_str}\033[0m"
-        else:
-            balance_colored = f"\033[91m{balance_str}\033[0m"
-
-        fields = ["[1]Username", "[2]Password", "[3]Email", "[4]First Name", "[5]Last Name", "[6]Birth Date",
-                  "[7]Contact No.", "Balance"]
+        fields = ["Username", "Password", "Email", "First Name", "Last Name", "Birth Date", "Contact No.", "Balance"]
         values = [self._username, masked_password, self._email, self.name, self.last_name, birth_date, contact_no,
-                  balance_colored]
-
-
-        def visible_len(s):
-            return len(re.sub(r'\033\[[0-9;]*m', '', str(s)))
-
-
-        max_length = max(visible_len(f) + visible_len(v) + 5 for f, v in zip(fields, values))
+                  balance]
+        max_length = max(len(f) + len(str(v)) + 5 for f, v in zip(fields, values))
         width = max(max_length, 50)
 
         print("+" + "-" * width + "+")
-        print(f"| {'PROFILE INFO':^{width}} |")
+        print(f"| {'USER PROFILE':^{width - 2}} |")
         print("+" + "-" * width + "+")
 
         for field, value in zip(fields, values):
-            padding = width - 3 - len(field) - visible_len(value)
-            print(f"| {field} : {value}{' ' * padding} |")
+            print(f"| {field:<15}: {str(value):<{width - 19}} |")
 
         print("+" + "-" * width + "+")
+
 
