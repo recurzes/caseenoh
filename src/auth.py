@@ -87,7 +87,8 @@ class Authentication:
                     balance=float(result[10])
                 )
 
-                print(f"\n👋 Welcome back, {username}!")
+                print("\n✅ Login successful!")
+                print(f"👋 Welcome back, {username}!")
                 return True
             else:
                 print("\n❌ Invalid username or password.")
@@ -110,6 +111,5 @@ class Authentication:
         self.current_user.over_display()
 
     def get_profile_info(self):
-        self.current_user.display_profile_info()
-        ui.pause()
+        self.current_user.profile_info()
 

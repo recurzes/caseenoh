@@ -19,10 +19,8 @@ class Deposit:
             connection.commit()
 
             user.update_balance(amount)
-
-
             print(f"\n💰 Deposit of ${amount:.2f} successful!")
-            print(f"New Balance: ${user.get_balance():.2f}")
+            print("")
             return True
 
         except Exception as e:

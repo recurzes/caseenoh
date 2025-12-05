@@ -31,7 +31,6 @@ def login_menu():
             p = input("Password: ")
 
             if auth_service.login(u, p):
-                print("✅ Login successful!")
                 main_menu()
             else:
                 pause()
@@ -94,9 +93,8 @@ def main_menu():
 
 def profile_menu():
     while True:
-        print("\n=====================")
-        print("     --PROFILE--     ")
-        print("=====================")
+        print(" ")
+        auth_service.get_profile_info()
         print("[1] Update Profile")
         print("[2] Delete Account")
         print("[0] Exit")
@@ -120,6 +118,10 @@ def profile_menu():
 
 def update_profile_menu():
     while True:
+        print()
+        print("\n======================")
+        print("  --UPDATE PROFILE--  ")
+        print("======================")
         print("[1] First Name")
         print("[2] Last Name")
         print("[3] Phone Number")
