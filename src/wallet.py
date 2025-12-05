@@ -7,13 +7,13 @@ class Deposit:
             return False
 
         try:
-            connection = db.get_connection()
+            connection = db.get_connections()
             cursor = connection.cursor()
 
             query = """
                     UPDATE users
-                    SET balance = balance + %s
-                    WHERE username = %s \
+                    SET balance = balance + ?
+                    WHERE username = ?
                     """
             cursor.execute(query, (amount, user.get_username()))
             connection.commit()

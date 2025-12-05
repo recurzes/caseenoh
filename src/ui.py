@@ -1,12 +1,12 @@
-import auth
+from auth import Authentication
 import wallet
 import profile
 import sys
 import time
 
-auth_service = auth.Authentication()
+auth_service = Authentication()
 wallet_service = wallet.Deposit()
-profile_service = profile.Profile()
+profile_service = profile.Profile(auth_service)
 
 def pause():
     input("\nPress Enter to continue...")
@@ -151,8 +151,6 @@ def update_profile_menu():
             invalid_option()
             continue
 
-        if type == 6:
-            auth_service.current_user.get_id().update_user(value)
         profile_service.update_profile(value, type)
         return
 

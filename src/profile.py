@@ -3,73 +3,77 @@ import hashlib
 import auth
 
 class Profile:
+    def __init__(self, authentication):
+        self.authentication = authentication
+
     def update_profile(self, values, type):
         global query, params
-        connection = db.get_connection()
+        connection = db.get_connections()
         cursor = connection.cursor()
 
         try:
             if type == 1:
                 query = """
                         UPDATE users
-                        SET first_name = %s
-                        WHERE id = %s \
+                        SET first_name = ?
+                        WHERE id = ? \
                         """
                 params = (values,
-                          auth.Authentication.current_user.get_id())
+                          self.authentication.current_user.get_id())
             elif type == 2:
                 query = """
                         UPDATE users
-                        SET last_name = %s
-                        WHERE id = %s \
+                        SET last_name = ?
+                        WHERE id = ? \
                         """
                 params = (values,
-                          auth.Authentication.current_user.get_id().get_id(),)
+                          self.authentication.current_user.get_id())
             elif type == 3:
                 query = """
                         UPDATE users
-                        SET contact_number = %s
-                        WHERE id = %s \
+                        SET contact_number = ?
+                        WHERE id = ?
                         """
                 params = (values,
-                          auth.Authentication.current_user.get_id().get_id(),)
+                          self.authentication.current_user.get_id())
             elif type == 4:
                 query = """
                         UPDATE users
-                        SET birth_month = %s,
-                            birth_day   = %s,
-                            birth_year  = %s
-                        WHERE id = %s \
+                        SET birth_month = ?,
+                            birth_day   = ?,
+                            birth_year  = ?
+                        WHERE id = ?
                         """
                 params = (values[0],
                           values[1],
                           values[2],
-                          auth.Authentication.current_user.get_id().get_id())
+                          self.authentication.current_user.get_id())
             elif type == 5:
                 query = """
                         UPDATE users
-                        SET email = %s
-                        WHERE id = %s \
+                        SET email = ?
+                        WHERE id = ? 
                         """
                 params = (values,
-                          auth.Authentication.current_user.get_id().get_id(),)
+                          self.authentication.current_user.get_id())
             elif type == 6:
                 query = """
                         UPDATE users
-                        SET username = %s
-                        WHERE id = %s \
+                        SET username = ?
+                        WHERE id = ? 
                         """
                 params = (values,
-                          auth.Authentication.current_user.get_id().get_id())
+                          self.authentication.current_user.get_id())
+                self.authentication.current_user.update_user(values)
             elif type == 7:
                 hashed_password = hashlib.sha256(values.encode()).hexdigest()
                 query = """
                         UPDATE users
-                        SET password = %s
-                        WHERE id = %s \
+                        SET password = ?
+                        WHERE id = ?
                         """
                 params = (hashed_password,
-                          auth.Authentication.current_user.get_id(),)
+                          self.authentication.current_user.get_id())
 
             cursor.execute(query, params)
             connection.commit()
@@ -86,16 +90,16 @@ class Profile:
             connection.close()
 
     def delete_account(self):
-        connection = db.get_connection()
+        connection = db.get_connections()
         cursor = connection.cursor()
 
         try:
-            query = """DELETE 
+            query = """DELETE
                        FROM users
-                       WHERE id = %s;"""
+                       WHERE id = ?;"""
 
             values = (
-                self.current_user.get_id(),
+                self.authentication.current_user.get_id(),
             )
             cursor.execute(query, values)
             connection.commit()

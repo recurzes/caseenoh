@@ -1,16 +1,18 @@
 import hashlib
 import mysql.connector
 import db
-import models
+from models import User
 import ui
 
 class Authentication:
+
+    current_user = None
 
     def __init__(self):
         self.current_user = None
 
     def register(self, username, password, email, name, last_name, b_day, contact_no):
-        connections = db.get_connection()
+        connections = db.get_connections()
         cursor = connections.cursor()
 
         try:
@@ -18,7 +20,7 @@ class Authentication:
 
             query = """
             INSERT INTO users (username, password, email, first_name, last_name, birth_month, birth_day, birth_year, contact_number)
-            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
             """
             values = (username,
                 hashed_password,
@@ -47,7 +49,7 @@ class Authentication:
             connections.close()
 
     def login(self, username, password):
-        connections = db.get_connection()
+        connections = db.get_connections()
         cursor = connections.cursor()
 
         try:
@@ -66,14 +68,14 @@ class Authentication:
                            contact_number,
                            balance
                     FROM users
-                    WHERE username = %s \
+                    WHERE username = ? 
                     """
 
             cursor.execute(query, (username,))
             result = cursor.fetchone()
 
             if result and result[2] == hashed_password:
-                self.current_user = models.User(
+                self.current_user = User(
                     id=result[0],
                     username=result[1],
                     password=result[2],
@@ -113,3 +115,6 @@ class Authentication:
     def get_profile_info(self):
         self.current_user.display_profile_info()
         ui.pause()
+
+    def get_ids(self):
+        return self.current_user.get_id()
