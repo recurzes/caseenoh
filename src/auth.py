@@ -109,12 +109,7 @@ class Authentication:
     def profile(self):
         self.current_user.over_display()
 
-    def get_user(self, value):
-        self.current_user.get_user_info(value)
-
     def get_profile_info(self):
         self.current_user.display_profile_info()
         ui.pause()
 
-    def get_ids(self):
-        return self.current_user.get_id()
