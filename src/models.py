@@ -1,5 +1,4 @@
 
-import re
 class User:
 
     def __init__(self, id, username, password, email, name, last_name, b_day, contact_no, balance=0.0):
@@ -92,7 +91,7 @@ class User:
         birth_date = f"{self.month:02d}/{self.day:02d}/{self.year}"
         contact_no = str(self.contact_no)
         balance = f"${self._balance:,.2f}"
-        masked_password = "*" * (len(password) - 61)
+        masked_password = "*" * (len(password) - 55)
 
 
         fields = ["Username", "Password", "Email", "First Name", "Last Name", "Birth Date", "Contact No.", "Balance"]

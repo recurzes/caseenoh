@@ -1,8 +1,5 @@
 import db
 import hashlib
-
-
-
 class Profile:
     def __init__(self, authentication):
         self.authentication = authentication
