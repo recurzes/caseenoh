@@ -5,7 +5,7 @@ import sys
 import time
 
 auth_service = Authentication()
-wallet_service = wallet.Deposit()
+wallet_service = None
 profile_service = profile.Profile(auth_service)
 
 def pause():
@@ -16,6 +16,7 @@ def invalid_option():
     time.sleep(1)
 
 def login_menu():
+    global wallet_service
     while True:
         print("\n+------------------------------+")
         print("|     CASINO APP: SIGN IN      |")
@@ -31,6 +32,7 @@ def login_menu():
             p = input("Password: ")
 
             if auth_service.login(u, p):
+                wallet_service = wallet.Wallet(auth_service.current_user)
                 main_menu()
             else:
                 pause()
@@ -77,7 +79,6 @@ def main_menu():
         elif choice == "2":
             amount = float(input("Enter deposit amount: "))
             wallet_service.process_deposit(
-                auth_service.current_user,
                 amount
             )
 
