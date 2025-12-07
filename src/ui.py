@@ -17,13 +17,13 @@ def invalid_option():
 
 def login_menu():
     while True:
-        print("\n=====================")
-        print(" CASINO APP: SIGN IN ")
-        print("=====================")
-        print("[1] Sign-in")
-        print("[2] Register")
-        print("[0] Exit Application")
-
+        print("\n+------------------------------+")
+        print("|     CASINO APP: SIGN IN      |")
+        print("+------------------------------+")
+        print("|  [1] Sign-in                 |")
+        print("|  [2] Register                |")
+        print("|  [0] Exit Application        |")
+        print("+------------------------------+")
         choice = input("Choice: ")
 
         if choice == '1':
@@ -31,7 +31,6 @@ def login_menu():
             p = input("Password: ")
 
             if auth_service.login(u, p):
-                print("✅ Login successful!")
                 main_menu()
             else:
                 pause()
@@ -62,8 +61,8 @@ def login_menu():
             invalid_option()
 
 def main_menu():
-    print("")
     while True:
+        print("")
         auth_service.profile()
         print("[1] Play")
         print("[2] Deposit")
@@ -94,9 +93,8 @@ def main_menu():
 
 def profile_menu():
     while True:
-        print("\n=====================")
-        print("     --PROFILE--     ")
-        print("=====================")
+        print("")
+        auth_service.get_profile_info()
         print("[1] Update Profile")
         print("[2] Delete Account")
         print("[0] Exit")
@@ -120,27 +118,30 @@ def profile_menu():
 
 def update_profile_menu():
     while True:
-        print("[1] First Name")
-        print("[2] Last Name")
-        print("[3] Phone Number")
-        print("[4] Birth Date")
-        print("[5] Email")
-        print("[6] Username")
-        print("[7] Password")
-        print("[0] Exit")
-
+        print("\n+------------------------------------+")
+        print("|          UPDATE PROFILE            |")
+        print("+------------------------------------+")
+        print("|  [1] Username                      |")
+        print("|  [2] Password                      |")
+        print("|  [3] Email                         |")
+        print("|  [4] First Name                    |")
+        print("|  [5] Last Name                     |")
+        print("|  [6] Birth Date                    |")
+        print("|  [7] Contact No                    |")
+        print("|  [0] Exit                          |")
+        print("+------------------------------------+")
         type = int(input("Enter choice: "))
 
         if type == 0:
             return
 
-        if type in (1, 2, 5, 6, 7):
+        if type in (1, 2, 3, 4, 5):
             value = input("Enter value: ")
 
-        elif type == 3:
+        elif type == 7:
             value = int(input("Enter new Phone.No: "))
 
-        elif type == 4:
+        elif type == 6:
             value = [
                 int(input("Month(1 - 12): ")),
                 int(input("Day: ")),
