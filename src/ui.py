@@ -4,6 +4,8 @@ import profile
 import sys
 import time
 
+from src.games import blackjack, slots, baccarat
+
 auth_service = Authentication()
 wallet_service = None
 profile_service = profile.Profile(auth_service)
@@ -32,7 +34,7 @@ def login_menu():
             p = input("Password: ")
 
             if auth_service.login(u, p):
-                wallet_service = wallet.Wallet(auth_service.current_user)
+                wallet_service = wallet.Wallet.initialize(auth_service.current_user)
                 main_menu()
             else:
                 pause()
@@ -62,6 +64,34 @@ def login_menu():
         else:
             invalid_option()
 
+def game_menu():
+    """Casino games selection menu"""
+    while True:
+        current_balance = auth_service.current_user.get_balance()
+        print("\n+------------------------------+")
+        print("|      CASINO GAMES            |")
+        print("+------------------------------+")
+        print(f"|  Balance: ${current_balance:,.2f}")
+        print("+------------------------------+")
+        print("|  [1] Blackjack               |")
+        print("|  [2] Slots                   |")
+        print("|  [3] Baccarat                |")
+        print("|  [0] Back to Main Menu       |")
+        print("+------------------------------+")
+
+        choice = input("Choose a game: ")
+
+        if choice == "1":
+            blackjack.blackjack(wallet_service)
+        elif choice == "2":
+            slots.slots(current_balance)
+        elif choice == "3":
+            baccarat.baccarat(wallet_service)
+        elif choice == "0":
+            return
+        else:
+            invalid_option()
+
 def main_menu():
     while True:
         print("")
@@ -74,7 +104,7 @@ def main_menu():
         choice = input("Choice: ")
 
         if choice == "1":
-            pass
+            game_menu()
 
         elif choice == "2":
             amount = float(input("Enter deposit amount: "))
@@ -86,6 +116,7 @@ def main_menu():
             profile_menu()
 
         elif choice == "0":
+            wallet.Wallet.clear()
             auth_service.logout()
             break
 
