@@ -1,5 +1,5 @@
 from auth import Authentication
-import wallet
+from src.wallet import Wallet
 import profile
 import sys
 import time
@@ -34,7 +34,7 @@ def login_menu():
             p = input("Password: ")
 
             if auth_service.login(u, p):
-                wallet_service = wallet.Wallet.initialize(auth_service.current_user)
+                wallet_service = Wallet.initialize(auth_service.current_user)
                 main_menu()
             else:
                 pause()
@@ -84,7 +84,7 @@ def game_menu():
         if choice == "1":
             blackjack.blackjack(wallet_service)
         elif choice == "2":
-            slots.slots(current_balance)
+            slots.slots(wallet_service)
         elif choice == "3":
             baccarat.baccarat(wallet_service)
         elif choice == "0":
@@ -116,7 +116,7 @@ def main_menu():
             profile_menu()
 
         elif choice == "0":
-            wallet.Wallet.clear()
+            Wallet.clear()
             auth_service.logout()
             break
 
@@ -186,6 +186,3 @@ def update_profile_menu():
 
         profile_service.update_profile(value, type)
         return
-
-
-
