@@ -14,6 +14,10 @@ def baccarat(wallet: Wallet):
     print("Payouts: Player 1:1, Banker 0.95:1 (5% commission), Tie 8:1")
 
     bet = get_bet(balance, minimum=50)
+
+    # Deduct the bet up-front to make result handling consistent (refund on push)
+    wallet.process_deduction(bet)
+
     print("\n[1] Bet on Player")
     print("[2] Bet on Banker")
     print("[3] Bet on Tie")
@@ -21,6 +25,8 @@ def baccarat(wallet: Wallet):
 
     if choice not in ['1', '2', '3']:
         print("Invalid choice!")
+        # Refund the bet if invalid choice
+        wallet.process_win(bet)
         return
 
     # Deal initial two cards
@@ -102,19 +108,24 @@ def baccarat(wallet: Wallet):
     # Process winnings
     if result == "tie":
         if choice == "3":
-            wallet.process_win(bet * 8)
+            # Bet was already deducted; pay 9x to net +8x as before
+            wallet.process_win(bet * 9)
         else:
+            # Push: return the original bet (no net change)
             print(f"Push! Your ${bet} bet is returned")
+            wallet.process_win(bet)
     elif choice == '1' and result == "player":
-        wallet.process_win(bet)
+        # Player wins: net +1x (deducted already), so credit 2x
+        wallet.process_win(bet * 2)
     elif choice == '2' and result == "banker":
-        winnings = int(bet * 0.95)  # 5% commission
-        wallet.process_win(winnings)
+        # Banker wins: net +0.95x (deducted already), so credit bet + commission
+        commission = int(bet * 0.95)
+        wallet.process_win(bet + commission)
     else:
-        wallet.process_deduction(bet)
+        # Already deducted at the start, so losing requires no further action
+        print(f"You lost ${bet}.")
 
 
 if __name__ == "__main__":
     # For testing purposes
     print("Run this from the main menu!")
-
